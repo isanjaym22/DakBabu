@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#b4c5ff",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-tertiary-fixed": "#360f00",
+                    "tertiary": "#943700",
+                    "secondary-container": "#d0e1fb",
+                    "inverse-on-surface": "#f0f0fb",
+                    "inverse-primary": "#b4c5ff",
+                    "surface-container-highest": "#e1e2ed",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed": "#ffdbcd",
+                    "outline": "#737686",
+                    "primary-container": "#2563eb",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary": "#505f76",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-low": "#f3f3fe",
+                    "surface-container-high": "#e7e7f3",
+                    "on-error-container": "#93000a",
+                    "background": "#faf8ff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#ffede6",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#bc4800",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "on-surface": "#191b23",
+                    "on-secondary-container": "#54647a",
+                    "surface-dim": "#d9d9e5",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface": "#faf8ff",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#434655",
+                    "on-background": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-primary-fixed": "#00174b",
+                    "outline-variant": "#c3c6d7",
+                    "primary": "#004ac6",
+                    "surface-container": "#ededf9",
+                    "surface-tint": "#0053db"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "inline-gap": "12px",
+                    "stack-gap": "16px",
+                    "unit": "4px",
+                    "section-margin": "40px",
+                    "container-padding": "32px"
+            },
+            "fontFamily": {
+                    "h2": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "h1": ["Inter"],
+                    "h3": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "h2": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-14 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-50 flex items-center justify-between px-8">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">DakBabu</span>
+<span class="text-[13px] text-slate-500 dark:text-slate-400 font-medium pt-1">Bulk Email Sender</span>
+</div>
+<!-- Stepper (Desktop Navigation Cluster) -->
+<nav class="hidden md:flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-container text-white text-[12px] flex items-center justify-center font-bold">1</span>
+<span class="text-blue-600 dark:text-blue-400 font-semibold text-sm">Credentials</span>
+</div>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-[12px]">2</span>
+<span class="text-sm">Files</span>
+</div>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-[12px]">3</span>
+<span class="text-sm">Preview</span>
+</div>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-[12px]">4</span>
+<span class="text-sm">Send</span>
+</div>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-full cursor-pointer transition-colors" data-icon="help">help</button>
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-full cursor-pointer transition-colors" data-icon="settings">settings</button>
+</div>
+</header>
+<!-- Main Content Staging Area -->
+<main class="flex-grow flex items-center justify-center pt-14 pb-14 px-8">
+<section class="w-full max-w-[480px]">
+<!-- Content Card -->
+<div class="bg-white border border-outline-variant rounded-[10px] p-container-padding transition-all duration-300">
+<header class="mb-8 text-center md:text-left">
+<h1 class="font-h2 text-h2 text-on-surface mb-2">Email Credentials</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Enter the Gmail or Outlook account that will send the emails.</p>
+</header>
+<form class="space-y-stack-gap">
+<!-- Input Fields -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">SENDER EMAIL ADDRESS</label>
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary focus:ring-offset-1 outline-none transition-all font-body-md bg-surface-container-lowest" placeholder="you@gmail.com" type="email"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">APP PASSWORD</label>
+<div class="relative">
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary focus:ring-offset-1 outline-none transition-all font-body-md bg-surface-container-lowest" placeholder="xxxx xxxx xxxx xxxx" type="password"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 cursor-pointer" data-icon="visibility_off">visibility_off</span>
+</div>
+</div>
+<!-- Info Box -->
+<div class="bg-[#EFF6FF] border-l-4 border-blue-600 p-4 flex gap-3 rounded-r-lg">
+<span class="material-symbols-outlined text-blue-600 text-sm mt-0.5" data-icon="info">info</span>
+<p class="text-[13px] leading-snug text-blue-800 font-medium">Use an App Password, not your regular password.</p>
+</div>
+<!-- Actions -->
+<div class="pt-4 flex flex-col items-center gap-4">
+<button class="px-8 py-2.5 rounded-full border border-primary text-primary font-medium text-sm hover:bg-primary-fixed transition-all active:scale-95" type="button">
+                            Test Connection
+                        </button>
+<!-- Success State -->
+<div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold border border-emerald-100">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Connection successful!
+                        </div>
+</div>
+</form>
+</div>
+<!-- Decorative Branding/Support Visual -->
+<div class="mt-8 flex justify-center opacity-30 grayscale pointer-events-none">
+<img alt="Gmail" class="h-6 object-contain" data-alt="Official Gmail logo icon in minimal grey style on white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxRwS-ri3ZyqGEgIiQHqqy_2fk6zBowK0BG8rCyvpKUpivk25l9C7HeOBFU9oc6VPBqOTr-lXMqdxYJ0Dt81aoXeC-8P09q53uWrrFkD5tc1uGE3xRCIkNZTTwk9vt2s9OUHRNKXhEo32jRTXRZcZg3CfKcK1jylwS1a7CLPqP7TIrjl-sJbMhVUp-TqI4d5j6wJAZB5JCZaIbb1072qajWYfspbr4uQpo3ln4Yxa_aUNMuSvixZT_OOtbC4jgHMqKLrHskbrA2sU"/>
+<div class="w-px h-4 bg-slate-300 mx-4 self-center"></div>
+<img alt="Outlook" class="h-6 object-contain" data-alt="Official Microsoft Outlook logo icon in minimal grey style on white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTLar5w_mxsLc2orqzDJOm-y5Hp_jYGFjZAFtfT2y2mIXAsuuiPhW1BX6RjwMxqomVlsdtYNx4Q2qt2j7c8cD6Wa2SFMWti7Shhh9nQbTo-Nrrge12_eAj1uOXjr_xfbCC7PEzXFKuLaRfk4rsaK7YoILS2gaYMnm2yOA_CfVFo1RFg09aEPMuPwPlLmspB3B8pUKxmWh_OraiZyvDzCXTKCz_ZSeLIip0Sc7AEeUxMeoJFGqlOdjRGzj7JljPSB1ybegX0WL5o74"/>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-10 py-2 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 h-14">
+<!-- Back Button (Inactive Style) -->
+<button class="bg-white text-slate-300 border border-slate-200 rounded-full px-6 py-2 flex items-center gap-2 cursor-not-allowed font-inter text-xs font-medium uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+            Back
+        </button>
+<!-- Next Button (Active Style) -->
+<button class="bg-blue-600 text-white rounded-full px-8 py-2 shadow-sm flex items-center gap-2 hover:brightness-110 active:scale-95 duration-150 transition-all font-inter text-xs font-medium uppercase tracking-wider">
+            Next
+            <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</footer>
+</body></html>

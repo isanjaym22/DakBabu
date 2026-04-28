@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary-fixed-dim": "#b4c5ff",
+                "primary-fixed": "#dbe1ff",
+                "on-primary-fixed-variant": "#003ea8",
+                "on-tertiary-fixed": "#360f00",
+                "tertiary": "#943700",
+                "secondary-container": "#d0e1fb",
+                "inverse-on-surface": "#f0f0fb",
+                "inverse-primary": "#b4c5ff",
+                "surface-container-highest": "#e1e2ed",
+                "inverse-surface": "#2e3039",
+                "tertiary-fixed": "#ffdbcd",
+                "outline": "#737686",
+                "primary-container": "#2563eb",
+                "tertiary-fixed-dim": "#ffb596",
+                "surface-variant": "#e1e2ed",
+                "surface-container-lowest": "#ffffff",
+                "on-error": "#ffffff",
+                "secondary": "#505f76",
+                "on-primary-container": "#eeefff",
+                "surface-container-low": "#f3f3fe",
+                "surface-container-high": "#e7e7f3",
+                "on-error-container": "#93000a",
+                "background": "#faf8ff",
+                "secondary-fixed-dim": "#b7c8e1",
+                "error": "#ba1a1a",
+                "on-tertiary-container": "#ffede6",
+                "on-tertiary-fixed-variant": "#7d2d00",
+                "on-secondary": "#ffffff",
+                "tertiary-container": "#bc4800",
+                "on-secondary-fixed-variant": "#38485d",
+                "on-surface": "#191b23",
+                "on-secondary-container": "#54647a",
+                "surface-dim": "#d9d9e5",
+                "on-primary": "#ffffff",
+                "on-secondary-fixed": "#0b1c30",
+                "secondary-fixed": "#d3e4fe",
+                "surface": "#faf8ff",
+                "on-tertiary": "#ffffff",
+                "on-surface-variant": "#434655",
+                "on-background": "#191b23",
+                "error-container": "#ffdad6",
+                "surface-bright": "#faf8ff",
+                "on-primary-fixed": "#00174b",
+                "outline-variant": "#c3c6d7",
+                "primary": "#004ac6",
+                "surface-container": "#ededf9",
+                "surface-tint": "#0053db"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "inline-gap": "12px",
+                "stack-gap": "16px",
+                "unit": "4px",
+                "section-margin": "40px",
+                "container-padding": "32px"
+            },
+            "fontFamily": {
+                "h2": ["Inter"],
+                "label-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "label-sm": ["Inter"],
+                "h1": ["Inter"],
+                "h3": ["Inter"],
+                "body-md": ["Inter"]
+            },
+            "fontSize": {
+                "h2": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-14 bg-white border-b border-slate-200 flex items-center justify-between px-8 z-50 font-inter text-sm antialiased">
+<div class="text-xl font-bold text-slate-900 tracking-tight">DakBabu</div>
+<nav class="flex items-center gap-6">
+<span class="text-slate-500 hover:text-slate-700 cursor-pointer active:opacity-80 transition-colors">Credentials</span>
+<span class="text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer active:opacity-80 transition-colors">Files</span>
+<span class="text-slate-500 hover:text-slate-700 cursor-pointer active:opacity-80 transition-colors">Preview</span>
+<span class="text-slate-500 hover:text-slate-700 cursor-pointer active:opacity-80 transition-colors">Send</span>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors">help</span>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors">settings</span>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="w-full max-w-[780px] mt-14 mb-20 p-container-padding flex flex-col gap-stack-gap">
+<!-- Step Indicator -->
+<div class="flex items-center justify-center gap-4 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+<span class="text-label-sm text-on-surface">Step 1</span>
+</div>
+<div class="h-[2px] w-12 bg-primary-container"></div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full border-2 border-primary-container text-primary-container flex items-center justify-center font-bold">
+                    2
+                </div>
+<span class="text-label-sm text-primary font-bold">Step 2</span>
+</div>
+<div class="h-[2px] w-12 bg-outline-variant"></div>
+<div class="flex items-center gap-2 opacity-50">
+<div class="w-8 h-8 rounded-full border-2 border-outline flex items-center justify-center">
+                    3
+                </div>
+<span class="text-label-sm text-on-surface-variant">Step 3</span>
+</div>
+<div class="h-[2px] w-12 bg-outline-variant"></div>
+<div class="flex items-center gap-2 opacity-50">
+<div class="w-8 h-8 rounded-full border-2 border-outline flex items-center justify-center">
+                    4
+                </div>
+<span class="text-label-sm text-on-surface-variant">Step 4</span>
+</div>
+</div>
+<h1 class="font-h2 text-h2 text-on-surface">Upload Files &amp; Write Email</h1>
+<!-- Section A: Recipient List -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all hover:shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">group</span>
+<h3 class="font-h3 text-h3">Recipient List</h3>
+</div>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-8 flex flex-col items-center justify-center bg-surface-container-low transition-colors hover:bg-surface-container cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-2">upload_file</span>
+<p class="text-body-md text-on-surface-variant">Upload Excel or CSV file</p>
+<p class="text-label-sm text-outline mt-1 italic">Click or drag and drop</p>
+</div>
+<div class="mt-4 flex flex-wrap gap-2">
+<div class="flex items-center gap-1 bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-label-sm">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                    Found 42 recipients
+                </div>
+<div class="flex items-center gap-1 bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-full text-label-sm">
+<span class="material-symbols-outlined text-sm">warning</span>
+                    3 duplicate emails found
+                </div>
+</div>
+</section>
+<!-- Section B: Word Template -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all hover:shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">description</span>
+<h3 class="font-h3 text-h3">Word Template</h3>
+</div>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-8 flex flex-col items-center justify-center bg-surface-container-low transition-colors hover:bg-surface-container cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-2">article</span>
+<p class="text-body-md text-on-surface-variant">Upload Word Document (.docx)</p>
+<p class="text-label-sm text-outline mt-1 italic">This will be attached as a PDF to each email</p>
+</div>
+<div class="mt-4">
+<div class="inline-flex items-center gap-1 bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-label-sm">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                    Template looks good
+                </div>
+</div>
+</section>
+<!-- Section C: Email Content -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all hover:shadow-sm mb-12">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">mail</span>
+<h3 class="font-h3 text-h3">Email Content</h3>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-label-md text-on-surface">Subject Line</label>
+<input class="w-full h-10 px-4 rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:ring-offset-1 outline-none text-body-md" placeholder="e.g. Your personalized monthly report" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-label-md text-on-surface">Email Body</label>
+<textarea class="w-full p-4 rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:ring-offset-1 outline-none text-body-md resize-none" placeholder="Dear {{name}}, please find your attached document..." rows="5"></textarea>
+<p class="text-label-sm text-outline italic">Use {{name}} anywhere for personalization</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-10 py-2 bg-white border-t border-slate-200">
+<button class="bg-white text-slate-700 border border-slate-300 rounded-full px-6 py-2 flex items-center gap-2 hover:brightness-110 active:scale-95 duration-150 transition-all font-inter text-xs font-medium uppercase tracking-wider">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+            Back
+        </button>
+<button class="bg-blue-600 text-white rounded-full px-8 py-2 shadow-sm flex items-center gap-2 hover:brightness-110 active:scale-95 duration-150 transition-all font-inter text-xs font-medium uppercase tracking-wider">
+            Next
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</footer>
+</body></html>

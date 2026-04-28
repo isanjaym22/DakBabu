@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DakBabu - Preview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary": "#943700",
+                        "secondary-container": "#d0e1fb",
+                        "inverse-on-surface": "#f0f0fb",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "inverse-surface": "#2e3039",
+                        "tertiary-fixed": "#ffdbcd",
+                        "outline": "#737686",
+                        "primary-container": "#2563eb",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-variant": "#e1e2ed",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary": "#505f76",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-low": "#f3f3fe",
+                        "surface-container-high": "#e7e7f3",
+                        "on-error-container": "#93000a",
+                        "background": "#faf8ff",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#ffede6",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-surface": "#191b23",
+                        "on-secondary-container": "#54647a",
+                        "surface-dim": "#d9d9e5",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface": "#faf8ff",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "on-background": "#191b23",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#c3c6d7",
+                        "primary": "#004ac6",
+                        "surface-container": "#ededf9",
+                        "surface-tint": "#0053db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "inline-gap": "12px",
+                        "stack-gap": "16px",
+                        "unit": "4px",
+                        "section-margin": "40px",
+                        "container-padding": "32px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-canvas { background-color: #F8FAFC; }
+    </style>
+</head>
+<body class="bg-canvas font-body-md text-on-surface antialiased min-h-screen">
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 w-full h-14 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 z-50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">DakBabu</span>
+<nav class="hidden md:flex items-center space-x-6 h-14">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 font-inter text-sm antialiased transition-colors" href="#">Credentials</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 font-inter text-sm antialiased transition-colors" href="#">Files</a>
+<a class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 h-14 flex items-center font-inter text-sm antialiased" href="#">Preview</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 font-inter text-sm antialiased transition-colors" href="#">Send</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-full transition-colors cursor-pointer">help</button>
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-full transition-colors cursor-pointer">settings</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-24 px-container-padding max-w-[1200px] mx-auto">
+<!-- Step Indicator -->
+<div class="flex items-center justify-center mb-section-margin gap-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="h-0.5 w-12 bg-primary-container"></div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="h-0.5 w-12 bg-primary-container"></div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full ring-2 ring-primary-container ring-offset-2 bg-white flex items-center justify-center text-primary-container font-bold">3</div>
+<div class="h-0.5 w-12 bg-outline-variant"></div>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-outline font-bold">4</div>
+</div>
+</div>
+<!-- Heading Section -->
+<div class="mb-stack-gap">
+<h1 class="font-h2 text-h2 text-on-surface">Preview</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">This is how the first email will look...</p>
+</div>
+<!-- Email Preview Card -->
+<div class="bg-white rounded-[10px] border border-outline-variant shadow-sm overflow-hidden mb-stack-gap">
+<!-- Email Header -->
+<div class="px-6 py-4 border-b border-slate-100 space-y-2">
+<div class="flex items-center gap-2">
+<span class="text-label-sm text-outline w-16">To:</span>
+<span class="text-body-md font-medium px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded-md">priya@example.com</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm text-outline w-16">Subject:</span>
+<span class="text-body-md font-semibold text-on-surface">Thank you, Priya!</span>
+</div>
+</div>
+<!-- Email Body -->
+<div class="p-8 bg-canvas min-h-[200px]">
+<div class="max-w-[600px] mx-auto bg-white p-8 rounded-lg border border-slate-100 shadow-sm">
+<p class="font-body-md text-on-surface leading-relaxed">
+                        Dear Priya,<br/><br/>
+                        Thank you for attending our seminar. We truly appreciate your presence and the insightful questions you shared during the session. It was a pleasure having you with us.<br/><br/>
+                        As promised, please find your personalized participation certificate attached to this email.<br/><br/>
+                        Best regards,<br/>
+<strong>DakBabu Team</strong>
+</p>
+</div>
+</div>
+</div>
+<!-- Info Row -->
+<div class="flex items-center gap-3 bg-secondary-container/30 border border-secondary-container p-4 rounded-lg mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="attach_file">attach_file</span>
+<p class="text-body-md text-on-secondary-container font-medium">A personalized PDF will be attached to each email.</p>
+</div>
+<!-- Meta Info -->
+<div class="flex justify-center">
+<p class="text-label-md text-outline">Ready to send to 42 recipients</p>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-10 py-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+<button class="bg-white text-slate-700 border border-slate-300 rounded-full px-8 py-2 font-inter text-xs font-medium uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all duration-150 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+            Back
+        </button>
+<button class="bg-primary-container text-white rounded-full px-10 py-2.5 font-inter text-xs font-medium uppercase tracking-wider shadow-sm hover:brightness-110 active:scale-95 transition-all duration-150 flex items-center gap-2">
+            Start Sending
+            <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</footer>
+</body></html>
