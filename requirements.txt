@@ -1,0 +1,23 @@
+# DakBabu — Dependencies
+# Install: pip install -r requirements.txt
+
+# GUI framework
+customtkinter==5.2.2
+
+# Excel reading
+openpyxl==3.1.5
+
+# Word document templating
+python-docx==1.2.0
+
+# Word → PDF conversion (requires MS Word installed)
+docx2pdf==0.1.8
+
+# Windows COM automation (MS Word detection)
+pywin32==311; sys_platform == "win32"
+
+# Packaging into standalone .exe
+pyinstaller==6.20.0
+
+# --- Dev dependencies ---
+pytest==9.0.3
