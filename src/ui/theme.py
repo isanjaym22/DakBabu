@@ -126,6 +126,7 @@ COLOR_BUTTON_SECONDARY_TEXT: str = "#1E293B"    # slate-800
 COLOR_BUTTON_SECONDARY_BORDER: str = "#CBD5E1"  # slate-300
 COLOR_BUTTON_DISABLED_TEXT: str = "#CBD5E1"      # slate-300
 COLOR_BUTTON_DISABLED_BORDER: str = "#E2E8F0"   # slate-200
+COLOR_PRIMARY_HOVER: str = "#1D4ED8"             # blue-700 (button hover darken)
 
 
 # ---------------------------------------------------------------------------

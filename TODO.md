@@ -114,14 +114,14 @@
 ## Phase 3: UI Screens
 
 ### 3a. Core UI Framework
-- [ ] `src/ui/app.py`:
+- [x] `src/ui/app.py`:
   - Root CTk window (title, icon, min size 900×600, default 1100×750)
   - Wizard navigation: show_step(n), track current step
   - Each step frame: validate(), get_data(), on_enter()
   - WM_DELETE_WINDOW handler for graceful shutdown
-- [ ] `src/ui/components/nav_bar.py` — match Stitch top header exactly
-- [ ] `src/ui/components/bottom_bar.py` — Back/Next footer, pill buttons
-- [ ] `src/ui/components/stepper.py` — step indicator (completed/active/pending)
+- [x] `src/ui/components/nav_bar.py` — match Stitch top header exactly
+- [x] `src/ui/components/bottom_bar.py` — Back/Next footer, pill buttons
+- [x] `src/ui/components/stepper.py` — step indicator (completed/active/pending)
 
 ### 3b. Reusable Components
 - [ ] `src/ui/components/file_picker.py` — dashed-border file upload area (match Stitch)
