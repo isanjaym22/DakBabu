@@ -124,27 +124,27 @@
 - [x] `src/ui/components/stepper.py` — step indicator (completed/active/pending)
 
 ### 3b. Reusable Components
-- [ ] `src/ui/components/file_picker.py` — dashed-border file upload area (match Stitch)
-- [ ] `src/ui/components/info_box.py` — blue info callout with icon
-- [ ] `src/ui/components/status_badge.py` — pill badges (Sent/Failed/Sending/Pending)
-- [ ] `src/ui/components/rich_textbox.py`:
+- [x] `src/ui/components/file_picker.py` — dashed-border file upload area (match Stitch)
+- [x] `src/ui/components/info_box.py` — blue info callout with icon
+- [x] `src/ui/components/status_badge.py` — pill badges (Sent/Failed/Sending/Pending)
+- [x] `src/ui/components/rich_textbox.py`:
   - tkinter.Text widget wrapped in CTk frame
   - Toolbar: Bold (B), Italic (I), Underline (U) buttons
   - Apply formatting via text tags on selected text
   - Export formatted content with tag metadata
-- [ ] `src/ui/dialogs.py` — error, warning, confirmation popups
+- [x] `src/ui/dialogs.py` — error, warning, confirmation popups
 
 ### 3c. Wizard Steps
-- [ ] `src/ui/steps/step0_welcome.py`:
+- [x] `src/ui/steps/step0_welcome.py`:
   - Show app name and brief instructions
   - Auto-detect Word in background → show status
   - Proceed button (or auto-proceed if Word found)
-- [ ] `src/ui/steps/step1_credentials.py` — match `stitch_ui/step1_credentials/screen.png`:
+- [x] `src/ui/steps/step1_credentials.py` — match `stitch_ui/step1_credentials/screen.png`:
   - Email input, password input (masked + toggle visibility)
   - Info box about App Passwords
   - Test Connection button → shows success/failure badge
   - Next unlocks only after successful test
-- [ ] `src/ui/steps/step2_files.py` — match `stitch_ui/step2_files/screen.png`:
+- [x] `src/ui/steps/step2_files.py` — match `stitch_ui/step2_files/screen.png`:
   - Recipient List section: file picker + recipient count + duplicate warning
   - Word Template section: file picker + placeholder validation result
   - Email Content section: subject input + rich text body
@@ -152,12 +152,12 @@
   - Info box with placeholder instructions
   - Warning at >500 recipients
   - Next unlocks only when all sections valid
-- [ ] `src/ui/steps/step3_preview.py` — match `stitch_ui/step3_preview/screen.png`:
+- [x] `src/ui/steps/step3_preview.py` — match `stitch_ui/step3_preview/screen.png`:
   - Email preview card (To, Subject, Body with formatting)
   - Attachment info row
   - Recipient count confirmation
   - "Start Sending" button
-- [ ] `src/ui/steps/step4_tracker.py` — match `stitch_ui/step4_tracker/screen.png`:
+- [x] `src/ui/steps/step4_tracker.py` — match `stitch_ui/step4_tracker/screen.png`:
   - Progress bar with count and percentage
   - Live table: #, Name, Email, Status (with status badges)
   - Stop button (red outline, pill shape)

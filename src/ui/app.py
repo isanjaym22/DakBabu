@@ -176,6 +176,11 @@ class App(ctk.CTk):
         self._update_navigation()
 
     @property
+    def content_frame(self) -> ctk.CTkFrame:
+        """Return the content area frame (used as master for step frames)."""
+        return self._content_frame
+
+    @property
     def current_step(self) -> int:
         """Return the zero-based index of the currently visible step."""
         return self._current_step
