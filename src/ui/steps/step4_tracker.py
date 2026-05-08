@@ -114,15 +114,15 @@ _STATUS_VARIANT_MAP: dict[str, BadgeVariant] = {
 }
 
 
+import queue
+import threading
+
 class Step4Tracker(ctk.CTkFrame):
     """Send tracking step — progress bar, action buttons, live table.
 
-    In Phase 3, static demo data is shown.  Phase 4 will call
-    ``update_row()``, ``set_progress()``, etc. to drive the live UI.
-
     Args:
         master: Parent widget (the content area in App).
-    """
+        """
 
     def __init__(
         self,
