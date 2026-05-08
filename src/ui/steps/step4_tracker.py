@@ -116,6 +116,8 @@ _STATUS_VARIANT_MAP: dict[str, BadgeVariant] = {
 
 import queue
 import threading
+from tkinter import filedialog
+from pathlib import Path
 
 class Step4Tracker(ctk.CTkFrame):
     """Send tracking step — progress bar, action buttons, live table.
@@ -138,6 +140,10 @@ class Step4Tracker(ctk.CTkFrame):
         self._total: int = 42
         self._current: int = 13
         self._percent: int = 30
+
+        # Initialize queue and results storage
+        self._queue: queue.Queue[dict] = queue.Queue()
+        self._results: list = []
 
         # Stretch
         self.grid_rowconfigure(0, weight=1)
@@ -164,6 +170,67 @@ class Step4Tracker(ctk.CTkFrame):
     def on_enter(self) -> None:
         """Called when this step becomes visible."""
         pass
+
+    def _start_sending(self) -> None:
+        """Start the sending process."""
+        app = self._get_app()
+        if app is None:
+            return
+
+        state = getattr(app, "state", {})
+        
+        # Get recipients from state
+        recipients = state.get("recipients", [])
+        if not recipients:
+            return
+
+        # Get other required data from state
+        template_path = state.get("word_path")
+        email = state.get("email", "")
+        password = state.get("password", "")
+        subject = state.get("subject", "")
+        body_html = state.get("body_text", "")
+        
+        if not all([template_path, email, password, subject, body_html]):
+            return
+
+        # Create queue and stop event
+        self._queue = queue.Queue()
+        self._stop_event = threading.Event()
+        
+        # Clear previous results
+        self._results = []
+        
+        # Clear table and populate with actual recipients
+        self.clear_table()
+        for i, recipient in enumerate(recipients):
+            self.add_recipient_row(
+                index=i,
+                num=str(i + 1),
+                name=recipient.name,
+                email=recipient.email,
+                status="pending"
+            )
+
+        # Launch send worker
+        from src.workers.send_worker import SendWorker
+        self._worker = SendWorker(
+            recipients=recipients,
+            template_path=template_path,
+            email=email,
+            password=password,
+            subject=subject,
+            body_html=body_html,
+            result_queue=self._queue,
+            stop_event=self._stop_event,
+        )
+        self._worker.start()
+        
+        # Start polling
+        self.after(100, self._poll_queue)
+        
+        # Update UI state
+        self.set_sending_state(True)
 
     # ------------------------------------------------------------------
     # Public API — for Phase 4 integration
@@ -575,6 +642,179 @@ class Step4Tracker(ctk.CTkFrame):
         """Handle Stop button click — Phase 4 placeholder."""
         pass
 
+    def _poll_queue(self) -> None:
+        """Poll the queue for updates from the send worker."""
+        try:
+            while True:  # Process all available messages
+                msg = self._queue.get_nowait()
+                msg_type = msg.get("type", "")
+                
+                if msg_type == "progress":
+                    self._handle_progress_message(msg)
+                elif msg_type == "done":
+                    self._handle_done_message(msg)
+                    return  # Stop polling when done
+                elif msg_type == "stopped":
+                    self._handle_stopped_message(msg)
+                    return  # Stop polling when stopped
+        except queue.Empty:
+            # No more messages, schedule next poll
+            self.after(100, self._poll_queue)
+
+    def _handle_progress_message(self, msg: dict) -> None:
+        """Handle a progress message from the send worker."""
+        index = msg.get("index", 0)
+        success = msg.get("success", False)
+        sent_count = msg.get("sent_count", 0)
+        total = msg.get("total", 1)
+        
+        # Update row status
+        status = "sent" if success else "failed"
+        self.update_row_status(index, status)
+        
+        # Update progress bar and count label
+        self.set_progress(sent_count, total)
+        
+        # Store result for export
+        self._results.append(msg)
+
+    def _handle_done_message(self, msg: dict) -> None:
+        """Handle a done message from the send worker."""
+        sent = msg.get("sent", 0)
+        failed = msg.get("failed", 0)
+        
+        # Update UI to show completion
+        self.set_sending_state(False)
+        self.set_time_remaining("Done")
+        
+        # Enable export button
+        self._export_btn.configure(state="normal")
+
+    def _handle_stopped_message(self, msg: dict) -> None:
+        """Handle a stopped message from the send worker."""
+        # Update UI to show stopped state
+        self.set_sending_state(False)
+        self.set_time_remaining("Stopped")
+        
+        # Enable export button
+        self._export_btn.configure(state="normal")
+    
+    def _get_app(self) -> "App":
+        """Find the root App window by walking up the widget tree."""
+        # Walk the master chain to find the App instance
+        widget = self
+        while widget is not None:
+            if hasattr(widget, 'state') and hasattr(widget, '_bottom_bar'):
+                return widget
+            widget = widget.master
+        return None
+    
+    def _handle_stop(self) -> None:
+        """Handle Stop button click."""
+        if hasattr(self, '_stop_event') and self._stop_event:
+            self._stop_event.set()
+        if hasattr(self, '_send_button'):
+            self._send_button.configure(state="normal")
+
     def _handle_export(self) -> None:
-        """Handle Export Log click — Phase 4 placeholder."""
-        pass
+        """Handle Export Log click."""
+        from tkinter import filedialog
+        import csv
+        
+        # Get path to save CSV file
+        path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
+        
+        if not path:
+            return
+            
+        # Write results to CSV
+        with open(path, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(["Name", "Email", "Status", "Error"])
+            for result in self._results:
+                recipient = result.get("recipient")
+                success = result.get("success", False)
+                error = result.get("error", "")
+                status = "Sent" if success else "Failed"
+                writer.writerow([recipient.name, recipient.email, status, error])
+
+    def _handle_resume(self) -> None:
+        """Handle Resume button click."""
+        app = self._get_app()
+        if app is None:
+            return
+            
+        state = getattr(app, "state", {})
+        recipients = state.get("recipients", [])
+        
+        # Find first pending recipient
+        start_index = None
+        for i, recipient in enumerate(recipients):
+            if recipient.status == "pending":
+                start_index = i
+                break
+        
+        if start_index is None:
+            return
+        
+        # Create new queue and stop_event
+        self._queue = queue.Queue()
+        self._stop_event = threading.Event()
+        
+        # Restart SendWorker from start_index
+        from src.workers.send_worker import SendWorker
+        self._worker = SendWorker(
+            recipients=recipients,
+            template_path=state.get("word_path"),
+            email=state.get("email"),
+            password=state.get("password"),
+            subject=state.get("subject"),
+            body_html=state.get("body_html"),
+            result_queue=self._queue,
+            stop_event=self._stop_event,
+            start_index=start_index
+        )
+        self._worker.start()
+        
+        # Start polling
+        self.after(100, self._poll_queue)
+        
+    def _handle_retry_failed(self) -> None:
+        """Handle Retry Failed button click."""
+        app = self._get_app()
+        if app is None:
+            return
+        
+        state = getattr(app, "state", {})
+        recipients = state.get("recipients", [])
+        
+        # Collect failed indexes
+        failed_indexes = []
+        for i, recipient in enumerate(recipients):
+            if recipient.status == "failed":
+                failed_indexes.append(i)
+        
+        if not failed_indexes:
+            return
+        
+        # Create new queue and stop_event
+        self._queue = queue.Queue()
+        self._stop_event = threading.Event()
+        
+        # Restart SendWorker with only failed indexes
+        from src.workers.send_worker import SendWorker
+        self._worker = SendWorker(
+            recipients=recipients,
+            template_path=state.get("word_path"),
+            email=state.get("email"),
+            password=state.get("password"),
+            subject=state.get("subject"),
+            body_html=state.get("body_html"),
+            result_queue=self._queue,
+            stop_event=self._stop_event,
+            retry_indexes=failed_indexes
+        )
+        self._worker.start()
+        
+        # Start polling
+        self.after(100, self._poll_queue)
