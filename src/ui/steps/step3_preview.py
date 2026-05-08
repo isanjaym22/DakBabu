@@ -34,6 +34,8 @@ from __future__ import annotations
 
 import customtkinter as ctk
 
+from src.core import template_engine
+
 from src.ui.theme import (
     COLOR_BACKGROUND,
     COLOR_INFO_BG,
@@ -126,21 +128,60 @@ class Step3Preview(ctk.CTkFrame):
         }
 
     def on_enter(self) -> None:
-        """Called when this step becomes visible."""
-        pass
+        """Called when this step becomes visible.
+
+        Reads the first recipient from app state, replaces placeholders
+        in the composed subject and body, and updates the preview card.
+        """
+        app = self._get_app()
+        if app is None:
+            return
+
+        state = getattr(app, "state", {})
+
+        # Gather recipients
+        recipients = state.get("recipients", [])
+        if not recipients:
+            self._update_preview(
+                to_email="—",
+                subject="—",
+                body="No recipients loaded yet.",
+                recipient_count=0,
+            )
+            return
+
+        first = recipients[0]
+
+        # Build replacement data for the first recipient
+        data = template_engine._build_replacement_data(first)
+
+        # Read composed subject and body from step 2 state
+        subject = state.get("subject", "")
+        body = state.get("body_text", "")
+
+        # Replace placeholders
+        filled_subject = template_engine.replace_placeholders(subject, data)
+        filled_body = template_engine.replace_placeholders(body, data)
+
+        self._update_preview(
+            to_email=first.email,
+            subject=filled_subject,
+            body=filled_body,
+            recipient_count=len(recipients),
+        )
 
     # ------------------------------------------------------------------
     # Public API — for Phase 4 integration
     # ------------------------------------------------------------------
 
-    def set_preview(
+    def _update_preview(
         self,
         to_email: str,
         subject: str,
         body: str,
         recipient_count: int,
     ) -> None:
-        """Populate the preview with real data.
+        """Update the preview card with the given data.
 
         Args:
             to_email: First recipient's email address.
@@ -163,6 +204,15 @@ class Step3Preview(ctk.CTkFrame):
         self._count_label.configure(
             text=f"Ready to send to {recipient_count} recipients"
         )
+
+    def _get_app(self) -> ctk.CTkBaseClass | None:
+        """Traverse up to find the root App instance."""
+        widget = self
+        while widget is not None:
+            if hasattr(widget, "state"):
+                return widget  # type: ignore[return-value]
+            widget = widget.master
+        return None
 
     # ------------------------------------------------------------------
     # Private — build

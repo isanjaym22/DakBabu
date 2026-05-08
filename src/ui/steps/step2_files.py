@@ -41,8 +41,11 @@ No direct core/ imports — data flows via app.py shared state.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import customtkinter as ctk
 
+from src.core import excel_reader, template_engine
 from src.ui.theme import (
     COLOR_BACKGROUND,
     COLOR_ON_SURFACE,
@@ -112,6 +115,16 @@ class Step2Files(ctk.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
+        # Tracking for overall validation state
+        self._excel_valid: bool = False
+        self._word_valid: bool = False
+
+        # Stored data from processing
+        self._recipients: list = []
+        self._duplicate_count: int = 0
+        self._placeholders: set[str] = set()
+        self._excel_columns: set[str] = set()
+
         self._build()
 
     # ------------------------------------------------------------------
@@ -119,8 +132,8 @@ class Step2Files(ctk.CTkFrame):
     # ------------------------------------------------------------------
 
     def validate(self) -> bool:
-        """Phase 3 placeholder — always allow."""
-        return True
+        """Allow proceeding only when both Excel and Word are valid."""
+        return self._excel_valid and self._word_valid
 
     def get_data(self) -> dict:
         """Return current file selections and email content."""
@@ -444,24 +457,142 @@ class Step2Files(ctk.CTkFrame):
     # ------------------------------------------------------------------
 
     def _on_excel_selected(self, path: object) -> None:
-        """Handle Excel file selection — Phase 4 will parse it."""
-        # Phase 3: show demo badges
-        self.set_excel_result(recipient_count=42, duplicate_count=3)
+        """Read Excel, store recipients in app state, show badges."""
+        file_path = Path(str(path))
+
+        recipients, result = excel_reader.read_recipients(file_path)
+
+        # Store in app state
+        app = self._get_app()
+        if app is not None:
+            app.state["recipients"] = recipients
+            app.state["excel_path"] = file_path
+            app.state["excel_result"] = result
+
+        # Count duplicates
+        dupes = excel_reader.get_duplicate_emails(recipients)
+        dup_count = sum(max(0, c - 1) for c in dupes.values())
+
+        self._recipients = recipients
+        self._duplicate_count = dup_count
+
+        # Extract column names for later cross-validation
+        columns, col_error = excel_reader.get_column_names(file_path)
+        self._excel_columns = {c.lower() for c in columns}
+
+        # Show badges
+        self.set_excel_result(
+            recipient_count=len(recipients),
+            duplicate_count=dup_count,
+            warnings=result.warnings if result.warnings else None,
+        )
+
+        self._excel_valid = result.is_valid and len(recipients) > 0
+        self._update_next_button()
 
     def _on_excel_cleared(self) -> None:
         """Handle Excel file removal."""
         for child in self._excel_badge_frame.winfo_children():
             child.destroy()
 
+        self._excel_valid = False
+        self._recipients = []
+        self._duplicate_count = 0
+        self._excel_columns = set()
+
+        app = self._get_app()
+        if app is not None:
+            app.state.pop("recipients", None)
+            app.state.pop("excel_path", None)
+            app.state.pop("excel_result", None)
+
+        self._update_next_button()
+
     def _on_word_selected(self, path: object) -> None:
-        """Handle Word file selection — Phase 4 will validate it."""
-        # Phase 3: show demo badge
-        self.set_word_result(valid=True)
+        """Scan Word doc for placeholders, cross-validate with Excel."""
+        file_path = Path(str(path))
+
+        # Scan the Word document for placeholders
+        placeholders, error = template_engine.scan_docx_placeholders(file_path)
+
+        if error is not None:
+            self.set_word_result(valid=False, message=error)
+            self._word_valid = False
+            self._update_next_button()
+            return
+
+        self._placeholders = placeholders
+
+        # Cross-validate if we have Excel columns already
+        if self._excel_columns:
+            result = template_engine.cross_validate_placeholders(
+                placeholders, self._excel_columns
+            )
+            self._word_valid = result.is_valid
+
+            if result.is_valid and not result.errors:
+                message = (
+                    "Template looks good"
+                    if not placeholders
+                    else f"Found {len(placeholders)} placeholder(s) — all matched"
+                )
+                self.set_word_result(valid=True, message=message)
+            else:
+                # Show first error as badge text
+                self.set_word_result(
+                    valid=False, message=result.errors[0] if result.errors else "Validation failed"
+                )
+        else:
+            # No Excel yet — just report placeholders found
+            self._word_valid = True
+            message = (
+                f"Found {len(placeholders)} placeholder(s)"
+                if placeholders
+                else "Template looks good"
+            )
+            self.set_word_result(valid=True, message=message)
+
+        # Store in app state
+        app = self._get_app()
+        if app is not None:
+            app.state["word_path"] = file_path
+            app.state["word_placeholders"] = placeholders
+
+        self._update_next_button()
 
     def _on_word_cleared(self) -> None:
         """Handle Word file removal."""
         for child in self._word_badge_frame.winfo_children():
             child.destroy()
+
+        self._word_valid = False
+        self._placeholders = set()
+
+        app = self._get_app()
+        if app is not None:
+            app.state.pop("word_path", None)
+            app.state.pop("word_placeholders", None)
+
+        self._update_next_button()
+
+    def _get_app(self) -> ctk.CTkBaseClass | None:
+        """Traverse up to find the root App instance."""
+        widget = self
+        while widget is not None:
+            if hasattr(widget, "_bottom_bar"):
+                return widget  # type: ignore[return-value]
+            widget = widget.master
+        return None
+
+    def _update_next_button(self) -> None:
+        """Enable/disable the Next button based on current validation state."""
+        app = self._get_app()
+        if app is not None and hasattr(app, "_bottom_bar"):
+            bottom_bar = app._bottom_bar
+            if hasattr(bottom_bar, "set_next_enabled"):
+                bottom_bar.set_next_enabled(
+                    self._excel_valid and self._word_valid
+                )
 
     def _handle_download_sample(self) -> None:
         """Download the sample Excel — Phase 4 will implement save."""

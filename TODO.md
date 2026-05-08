@@ -185,8 +185,8 @@
   - Supports retry (re-queue only failed recipients)
   - Cleans up temp files when done or stopped
 - [x] Wire Step 1 → connection_tester
-- [ ] Wire Step 2 → excel_reader + template_engine validation
-- [ ] Wire Step 3 → template_engine preview generation
+- [x] Wire Step 2 → excel_reader + template_engine validation
+- [x] Wire Step 3 → template_engine preview generation
 - [ ] Wire Step 4 → send_worker (full pipeline)
 - [ ] Implement queue polling in each step's `on_enter()`
 - [ ] CSV export functionality (export log button)
