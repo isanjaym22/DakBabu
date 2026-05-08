@@ -176,7 +176,7 @@
 - [x] `src/workers/connection_tester.py`:
   - Background thread: calls `core/email_sender.test_connection()`
   - Posts result to queue: `{type: "connection_result", success, error}`
-- [ ] `src/workers/send_worker.py`:
+- [x] `src/workers/send_worker.py`:
   - Background thread: iterates through recipients
   - For each: personalize doc → convert to PDF → send email
   - Posts per-recipient status updates to queue
