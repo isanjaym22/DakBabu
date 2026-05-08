@@ -173,7 +173,7 @@
 
 ## Phase 4: Workers & Integration
 
-- [ ] `src/workers/connection_tester.py`:
+- [x] `src/workers/connection_tester.py`:
   - Background thread: calls `core/email_sender.test_connection()`
   - Posts result to queue: `{type: "connection_result", success, error}`
 - [ ] `src/workers/send_worker.py`:
@@ -184,7 +184,7 @@
   - Supports resume (skip already-sent recipients)
   - Supports retry (re-queue only failed recipients)
   - Cleans up temp files when done or stopped
-- [ ] Wire Step 1 → connection_tester
+- [x] Wire Step 1 → connection_tester
 - [ ] Wire Step 2 → excel_reader + template_engine validation
 - [ ] Wire Step 3 → template_engine preview generation
 - [ ] Wire Step 4 → send_worker (full pipeline)

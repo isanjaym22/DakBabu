@@ -28,11 +28,19 @@ Layout (from stitch_ui/step1_credentials/screen.png):
     │        ✓ Connection successful!                   │
     └──────────────────────────────────────────────────┘
 
+Thread safety:
+    - ConnectionTester runs in a daemon background thread.
+    - Results flow through queue.Queue → root.after(100) poll.
+    - No tkinter calls are ever made from the worker thread.
+
 All visual values imported from src.ui.theme.  Zero business logic.
-No direct core/ imports — data flows via app.py shared state.
+No direct core/ imports — all core calls go through src.workers.
 """
 
 from __future__ import annotations
+
+import queue
+import threading
 
 import customtkinter as ctk
 
@@ -64,6 +72,7 @@ from src.ui.theme import (
 )
 from src.ui.components.info_box import InfoBox
 from src.ui.components.status_badge import StatusBadge, BadgeVariant
+from src.workers.connection_tester import ConnectionTester
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +86,7 @@ _TEST_BTN_WIDTH: int = 160
 _TEST_BTN_HEIGHT: int = 38
 _TEST_BTN_FONT: tuple[str, int, str] = (FONT_FAMILY, 13, "bold")
 _TOGGLE_BTN_SIZE: int = 32
+_POLL_INTERVAL_MS: int = 100
 
 
 class Step1Credentials(ctk.CTkFrame):
@@ -87,11 +97,14 @@ class Step1Credentials(ctk.CTkFrame):
 
     Args:
         master: Parent widget (the content area in App).
+        on_connection_success: Optional callback fired when the connection
+            test passes — App can use this to unlock the Next button.
     """
 
     def __init__(
         self,
         master: ctk.CTkBaseClass,
+        on_connection_success: "callable | None" = None,
     ) -> None:
         super().__init__(
             master=master,
@@ -101,6 +114,12 @@ class Step1Credentials(ctk.CTkFrame):
 
         self._connection_tested: bool = False
         self._password_visible: bool = False
+        self._on_connection_success = on_connection_success
+
+        # Worker state — recreated for each test attempt
+        self._result_queue: queue.Queue[dict] = queue.Queue()
+        self._stop_event: threading.Event = threading.Event()
+        self._worker: ConnectionTester | None = None
 
         # Stretch content area
         self.grid_rowconfigure(0, weight=1)
@@ -114,8 +133,7 @@ class Step1Credentials(ctk.CTkFrame):
 
     def validate(self) -> bool:
         """Allow proceeding only after a successful connection test."""
-        # Phase 3: always allow (no worker wired yet)
-        return True
+        return self._connection_tested
 
     def get_data(self) -> dict:
         """Return current email and password values."""
@@ -129,7 +147,7 @@ class Step1Credentials(ctk.CTkFrame):
         pass
 
     # ------------------------------------------------------------------
-    # Public API — for Phase 4 worker integration
+    # Public API — for worker integration and external callers
     # ------------------------------------------------------------------
 
     def set_connection_result(
@@ -154,6 +172,9 @@ class Step1Credentials(ctk.CTkFrame):
                 master=self._badge_frame,
                 variant=BadgeVariant.CONNECTION_OK,
             )
+            # Notify app so it can enable the Next button
+            if self._on_connection_success is not None:
+                self._on_connection_success()
         else:
             badge = StatusBadge(
                 master=self._badge_frame,
@@ -360,10 +381,58 @@ class Step1Credentials(ctk.CTkFrame):
     def _handle_test(self) -> None:
         """Handle Test Connection click.
 
-        In Phase 3 this is a placeholder — Phase 4 will wire the
-        connection_tester worker.  For now, show a visual demo.
+        Cancels any in-flight test, starts a fresh ConnectionTester
+        background thread, updates the button to 'testing' state, and
+        begins polling the result queue with root.after().
         """
-        # Phase 3 placeholder: immediately show success for testing
+        email = self._email_entry.get().strip()
+        password = self._password_entry.get()
+
+        if not email or not password:
+            # Show a friendly error badge immediately — no need for a thread
+            self.set_connection_result(
+                success=False,
+                error_message="Please enter your email address and App Password.",
+            )
+            return
+
+        # Cancel any previous in-flight test
+        self._stop_event.set()
+
+        # Fresh stop event and queue for this attempt
+        self._stop_event = threading.Event()
+        self._result_queue = queue.Queue()
+
+        # Update UI to show 'testing' state
         self.set_testing()
-        # Simulate instant result (Phase 4 replaces with real worker)
-        self.after(800, lambda: self.set_connection_result(True))
+
+        # Launch background worker — never call tkinter from inside it
+        self._worker = ConnectionTester(
+            email=email,
+            password=password,
+            result_queue=self._result_queue,
+            stop_event=self._stop_event,
+        )
+        self._worker.start()
+
+        # Begin polling — all UI updates happen here, on the main thread
+        self.after(_POLL_INTERVAL_MS, self._poll_queue)
+
+    def _poll_queue(self) -> None:
+        """Poll the result queue and update the UI when a message arrives.
+
+        Called repeatedly via root.after() until a result is received.
+        Safe to call from the main thread only.
+        """
+        try:
+            msg = self._result_queue.get_nowait()
+        except queue.Empty:
+            # No result yet — reschedule and keep waiting
+            self.after(_POLL_INTERVAL_MS, self._poll_queue)
+            return
+
+        if msg.get("type") == "connection_result":
+            self.set_connection_result(
+                success=msg["success"],
+                error_message=msg.get("error", ""),
+            )
