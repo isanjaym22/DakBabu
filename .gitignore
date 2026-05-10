@@ -55,3 +55,4 @@ coverage.xml
 
 # Generated PDFs (temp output during development)
 temp_pdfs/
+*:Zone.Identifier
