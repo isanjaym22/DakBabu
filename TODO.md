@@ -187,10 +187,10 @@
 - [x] Wire Step 1 → connection_tester
 - [x] Wire Step 2 → excel_reader + template_engine validation
 - [x] Wire Step 3 → template_engine preview generation
-- [ ] Wire Step 4 → send_worker (full pipeline)
-- [ ] Implement queue polling in each step's `on_enter()`
-- [ ] CSV export functionality (export log button)
-- [ ] Sample Excel download functionality
+- [x] Wire Step 4 → send_worker (full pipeline)
+- [x] Implement queue polling in each step's `on_enter()`
+- [x] CSV export functionality (export log button)
+- [x] Sample Excel download functionality
 
 **Phase 4 exit criteria:** Full end-to-end flow works. Can send real emails with real Excel/Word files.
 

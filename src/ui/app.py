@@ -81,6 +81,7 @@ class App(ctk.CTk):
         # -- Wizard state --------------------------------------------------
         self._current_step: int = 0
         self._steps: list[ctk.CTkFrame] = []
+        self.app_state: dict = {}
 
         # -- Layout: 3 rows (nav, content, bottom) ------------------------
         self.grid_rowconfigure(0, weight=0)  # NavBar — fixed height

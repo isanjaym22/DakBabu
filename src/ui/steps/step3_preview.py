@@ -86,12 +86,14 @@ class Step3Preview(ctk.CTkFrame):
     def __init__(
         self,
         master: ctk.CTkBaseClass,
+        app: ctk.CTkBaseClass | None = None,
     ) -> None:
         super().__init__(
             master=master,
             fg_color=COLOR_BACKGROUND,
             corner_radius=0,
         )
+        self._app = app
 
         # Stretch
         self.grid_rowconfigure(0, weight=1)
@@ -133,7 +135,7 @@ class Step3Preview(ctk.CTkFrame):
         Reads the first recipient from app state, replaces placeholders
         in the composed subject and body, and updates the preview card.
         """
-        app = self._get_app()
+        app = self._app
         if app is None:
             return
 
@@ -205,14 +207,7 @@ class Step3Preview(ctk.CTkFrame):
             text=f"Ready to send to {recipient_count} recipients"
         )
 
-    def _get_app(self) -> ctk.CTkBaseClass | None:
-        """Traverse up to find the root App instance."""
-        widget = self
-        while widget is not None:
-            if hasattr(widget, "state"):
-                return widget  # type: ignore[return-value]
-            widget = widget.master
-        return None
+
 
     # ------------------------------------------------------------------
     # Private — build

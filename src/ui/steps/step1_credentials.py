@@ -102,30 +102,31 @@ class Step1Credentials(ctk.CTkFrame):
     """
 
     def __init__(
-        self,
-        master: ctk.CTkBaseClass,
-        on_connection_success: "callable | None" = None,
-    ) -> None:
-        super().__init__(
-            master=master,
-            fg_color=COLOR_BACKGROUND,
-            corner_radius=0,
-        )
+            self,
+            master: ctk.CTkBaseClass,
+            on_connection_success: "callable | None" = None,
+            app: ctk.CTkBaseClass | None = None,
+        ) -> None:
+            super().__init__(
+                master=master,
+                fg_color=COLOR_BACKGROUND,
+                corner_radius=0,
+            )
+            self._app = app
+            self._connection_tested: bool = False
+            self._password_visible: bool = False
+            self._on_connection_success = on_connection_success
 
-        self._connection_tested: bool = False
-        self._password_visible: bool = False
-        self._on_connection_success = on_connection_success
+            # Worker state — recreated for each test attempt
+            self._result_queue: queue.Queue[dict] = queue.Queue()
+            self._stop_event: threading.Event = threading.Event()
+            self._worker: ConnectionTester | None = None
 
-        # Worker state — recreated for each test attempt
-        self._result_queue: queue.Queue[dict] = queue.Queue()
-        self._stop_event: threading.Event = threading.Event()
-        self._worker: ConnectionTester | None = None
+            # Stretch content area
+            self.grid_rowconfigure(0, weight=1)
+            self.grid_columnconfigure(0, weight=1)
 
-        # Stretch content area
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        self._build()
+            self._build()
 
     # ------------------------------------------------------------------
     # StepFrame protocol

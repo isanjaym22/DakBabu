@@ -36,19 +36,19 @@ def main() -> None:
     app.add_step(step0)
 
     # -- Step 1: Credentials -----------------------------------------------
-    step1 = Step1Credentials(master=app.content_frame)
+    step1 = Step1Credentials(master=app.content_frame, app=app)
     app.add_step(step1)
 
     # -- Step 2: Files & Email ---------------------------------------------
-    step2 = Step2Files(master=app.content_frame)
+    step2 = Step2Files(master=app.content_frame, app=app)
     app.add_step(step2)
 
     # -- Step 3: Preview ---------------------------------------------------
-    step3 = Step3Preview(master=app.content_frame)
+    step3 = Step3Preview(master=app.content_frame, app=app)
     app.add_step(step3)
 
     # -- Step 4: Send & Track ----------------------------------------------
-    step4 = Step4Tracker(master=app.content_frame)
+    step4 = Step4Tracker(master=app.content_frame, app=app)
     app.add_step(step4)
 
     app.mainloop()

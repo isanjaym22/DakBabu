@@ -104,12 +104,14 @@ class Step2Files(ctk.CTkFrame):
     def __init__(
         self,
         master: ctk.CTkBaseClass,
+        app: ctk.CTkBaseClass | None = None,
     ) -> None:
         super().__init__(
             master=master,
             fg_color=COLOR_BACKGROUND,
             corner_radius=0,
         )
+        self._app = app
 
         # Stretch
         self.grid_rowconfigure(0, weight=1)
@@ -465,9 +467,9 @@ class Step2Files(ctk.CTkFrame):
         # Store in app state
         app = self._get_app()
         if app is not None:
-            app.state["recipients"] = recipients
-            app.state["excel_path"] = file_path
-            app.state["excel_result"] = result
+            app.app_state["recipients"] = recipients
+            app.app_state["excel_path"] = file_path
+            app.app_state["excel_result"] = result
 
         # Count duplicates
         dupes = excel_reader.get_duplicate_emails(recipients)
@@ -502,9 +504,9 @@ class Step2Files(ctk.CTkFrame):
 
         app = self._get_app()
         if app is not None:
-            app.state.pop("recipients", None)
-            app.state.pop("excel_path", None)
-            app.state.pop("excel_result", None)
+            app.app_state.pop("recipients", None)
+            app.app_state.pop("excel_path", None)
+            app.app_state.pop("excel_result", None)
 
         self._update_next_button()
 
@@ -555,8 +557,8 @@ class Step2Files(ctk.CTkFrame):
         # Store in app state
         app = self._get_app()
         if app is not None:
-            app.state["word_path"] = file_path
-            app.state["word_placeholders"] = placeholders
+            app.app_state["word_path"] = file_path
+            app.app_state["word_placeholders"] = placeholders
 
         self._update_next_button()
 
@@ -570,29 +572,21 @@ class Step2Files(ctk.CTkFrame):
 
         app = self._get_app()
         if app is not None:
-            app.state.pop("word_path", None)
-            app.state.pop("word_placeholders", None)
+            app.app_state.pop("word_path", None)
+            app.app_state.pop("word_placeholders", None)
 
         self._update_next_button()
 
-    def _get_app(self) -> ctk.CTkBaseClass | None:
-        """Traverse up to find the root App instance."""
-        widget = self
-        while widget is not None:
-            if hasattr(widget, "_bottom_bar"):
-                return widget  # type: ignore[return-value]
-            widget = widget.master
-        return None
-
+    def _get_app(self):
+        """Return the app reference passed at construction."""
+        return self._app
+    
     def _update_next_button(self) -> None:
         """Enable/disable the Next button based on current validation state."""
-        app = self._get_app()
-        if app is not None and hasattr(app, "_bottom_bar"):
-            bottom_bar = app._bottom_bar
-            if hasattr(bottom_bar, "set_next_enabled"):
-                bottom_bar.set_next_enabled(
-                    self._excel_valid and self._word_valid
-                )
+        if self._app is not None:
+            self._app._bottom_bar.set_next_enabled(
+                self._excel_valid and self._word_valid
+            )
 
     def _handle_download_sample(self) -> None:
         """Download the sample Excel — Phase 4 will implement save."""

@@ -129,12 +129,14 @@ class Step4Tracker(ctk.CTkFrame):
     def __init__(
         self,
         master: ctk.CTkBaseClass,
+        app: ctk.CTkBaseClass | None = None,
     ) -> None:
         super().__init__(
             master=master,
             fg_color=COLOR_BACKGROUND,
             corner_radius=0,
         )
+        self._app = app
 
         self._is_sending: bool = False
         self._total: int = 42
@@ -173,7 +175,7 @@ class Step4Tracker(ctk.CTkFrame):
 
     def _start_sending(self) -> None:
         """Start the sending process."""
-        app = self._get_app()
+        app = self._app
         if app is None:
             return
 
@@ -698,17 +700,7 @@ class Step4Tracker(ctk.CTkFrame):
         
         # Enable export button
         self._export_btn.configure(state="normal")
-    
-    def _get_app(self) -> "App":
-        """Find the root App window by walking up the widget tree."""
-        # Walk the master chain to find the App instance
-        widget = self
-        while widget is not None:
-            if hasattr(widget, 'state') and hasattr(widget, '_bottom_bar'):
-                return widget
-            widget = widget.master
-        return None
-    
+
     def _handle_stop(self) -> None:
         """Handle Stop button click."""
         if hasattr(self, '_stop_event') and self._stop_event:
@@ -740,7 +732,7 @@ class Step4Tracker(ctk.CTkFrame):
 
     def _handle_resume(self) -> None:
         """Handle Resume button click."""
-        app = self._get_app()
+        app = self._app
         if app is None:
             return
             
@@ -781,7 +773,7 @@ class Step4Tracker(ctk.CTkFrame):
         
     def _handle_retry_failed(self) -> None:
         """Handle Retry Failed button click."""
-        app = self._get_app()
+        app = self._app
         if app is None:
             return
         
